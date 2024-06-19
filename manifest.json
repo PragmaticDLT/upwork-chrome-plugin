@@ -1,0 +1,60 @@
+{
+    "manifest_version"        : 3,
+    "name"                    : "Upwork Data",
+    "version"                 : "1.5",
+    "permissions"             : [
+        "cookies",
+        "activeTab",
+        "tabs",
+        "webRequest"
+    ],
+    "host_permissions"        : [
+        "https://www.upwork.com/*"
+    ],
+    "background"              : {
+        "service_worker": "background.js",
+        "type"          : "module"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "/images/*",
+                "style.css"
+            ],
+            "matches"  : [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "content_scripts"         : [
+        {
+            "matches"        : [
+                "https://www.upwork.com/*"
+            ],
+            "exclude_matches": [],
+            "js"             : [
+                "modules/envHandler.js",
+                "content.js",
+                "modules/scheduleWeek.js",
+                "modules/scheduleDispatch.js",
+                "modules/messageHandler.js",
+                "modules/showMessage.js"
+            ],
+            "css"            : [
+                "style.css"
+            ]
+        }
+    ],
+    "action"                  : {
+        "default_icon": {
+            "16" : "images/icon16.png",
+            "48" : "images/icon48.png",
+            "128": "images/icon128.png"
+        }
+    },
+    "icons"                   : {
+        "16" : "images/icon16.png",
+        "48" : "images/icon48.png",
+        "128": "images/icon128.png"
+    }
+}
