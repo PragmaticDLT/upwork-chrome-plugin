@@ -1,7 +1,7 @@
 {
     "manifest_version"        : 3,
     "name"                    : "Upwork Data",
-    "version"                 : "1.5",
+    "version"                 : "1.6",
     "permissions"             : [
         "cookies",
         "activeTab",
@@ -9,7 +9,7 @@
         "webRequest"
     ],
     "host_permissions"        : [
-        "https://www.upwork.com/*"
+        "https://www.upwork.com/ab/messages/rooms/*"
     ],
     "background"              : {
         "service_worker": "background.js",
@@ -29,7 +29,7 @@
     "content_scripts"         : [
         {
             "matches"        : [
-                "https://www.upwork.com/*"
+                "https://www.upwork.com/ab/messages/rooms/*"
             ],
             "exclude_matches": [],
             "js"             : [

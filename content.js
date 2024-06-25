@@ -7,24 +7,8 @@ let bearerToken = "";
 let cookie = "";
 
 
-function addButtonWhenDOMLoaded() {
-    // region create button
-    const button = document.createElement("button");
-    button.id = "floating-button";
-    button.style.cursor = "pointer";
-    button.innerHTML = `
-        <img src="${chrome.runtime.getURL("images/icon48.png")}" alt="Dispatcher Button Icon" style="margin-right: 5px;"/>  
-        <span>Sync data</span>`;
-    // endregion
-
+function startWhenDOMLoaded() {
     // region Create iframe
-    const currentURL = window.location.href;
-    if (currentURL.startsWith("https://www.upwork.com/ab/messages/rooms")) {
-        document.body.appendChild(button);
-        waitForTargetElementAndAdjustButton();
-    }
-
-    // create iframe
     const initialPopup = document.createElement("div");
     initialPopup.id = "upwork-init-popup";
 
@@ -34,32 +18,35 @@ function addButtonWhenDOMLoaded() {
 
     initialPopup.appendChild(initialIframe);
     document.body.appendChild(initialPopup);
+    console.log("==Plugin== iframe created");
 
     initialIframe.onload = () => {
-        initialIframe.contentWindow.postMessage({
-            type: "initial iframe",
-            companyReference
-        }, initialIframe.src);
+        setTimeout(() => {
+            initialIframe.contentWindow.postMessage({
+                type: "iframe created",
+                companyReference
+            }, initialIframe.src);
+
+        }, 2000);
+        console.log("==Plugin== Send message \"iframe created\"");
     };
 // endregion
 
-    // region Handle button click
-    button.addEventListener("click", function (event) {
-        initialIframe.contentWindow.postMessage({
-            type: "start sync",
-            companyReference
-        }, initialIframe.src);
-    });
-    // endregion
 
     // region Get cookie
     chrome.runtime.sendMessage({ action: "readCookies" }, async (res) => {
             ({ companyReference, referer, room, bearerToken, cookie } = res);
+            console.log("==Plugin== companyReference", companyReference);
+            console.log("==Plugin== referer", referer);
+            console.log("==Plugin== room", room);
+            console.log("==Plugin== bearerToken.length", bearerToken.length);
+            console.log("==Plugin== bearerToken.length", cookie.length);
         }
     );
-// endregion
+    // endregion
 
     window.addEventListener("message", (event) => messageHandler(event, SERVER_URL));
+    console.log("==Plugin== added EventListener");
 }
 
 
@@ -80,8 +67,8 @@ function waitForTargetElementAndAdjustButton() {
 
 // Check if the document has already loaded
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", addButtonWhenDOMLoaded);
+    document.addEventListener("DOMContentLoaded", startWhenDOMLoaded);
 }
 else {
-    addButtonWhenDOMLoaded();
+    startWhenDOMLoaded();
 }
