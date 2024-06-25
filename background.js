@@ -1,4 +1,4 @@
-const ENV_MODE = "staging";
+const ENV_MODE = "development";
 // 'development' || 'staging' || 'production'
 
 let serverUrl;
@@ -19,7 +19,7 @@ const bearerTokenPromise = new Promise(resolve => {
     bearerTokenPromiseResolve = resolve;
 });
 
-
+// region Get request header
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function (details) {
         for (var header of details.requestHeaders) {
@@ -35,9 +35,9 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     { urls: ["https://www.upwork.com/api/v3/rooms/*"] },
     ["requestHeaders", "extraHeaders"]
 );
+// endregion
 
-
-// getting cookies
+// region Get cookies
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "readCookies") {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -64,26 +64,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
 });
-
-
-// on extension click - open settings or onboarding
-// chrome.action.onClicked.addListener(function (tab) {
-//     if (tab?.url.includes("/settings?key") || tab?.url.includes("/not-eligible")) {
-//         return;
-//     }
-//
-//
-//     if (!allowedUrls.some(allowedUrl => tab?.url?.startsWith(allowedUrl))) {
-//         chrome.tabs.create({ url: `${serverUrl}/not-eligible` });
-//         return;
-//     }
-//     chrome.tabs.sendMessage(tab.id, { action: "open settings" });
-// });
-
-
-// open onboarding when installation
-// chrome.runtime.onInstalled.addListener(function (details) {
-//     if (details.reason === "install") {
-//         chrome.tabs.create({ url: `${serverUrl}/onboarding` });
-//     }
-// });
+//endregion

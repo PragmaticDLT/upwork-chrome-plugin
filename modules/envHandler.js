@@ -5,7 +5,6 @@ function envHandler(mode) {
             return "http://localhost:3000";
 
         case "production":
-            // return "https://hcp-dispatcher-nextjs-production.azurewebsites.net";
             return "https://app.hcpdispatcher.com";
 
         default:

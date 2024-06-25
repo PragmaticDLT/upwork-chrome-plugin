@@ -35,8 +35,6 @@
             "js"             : [
                 "modules/envHandler.js",
                 "content.js",
-                "modules/scheduleWeek.js",
-                "modules/scheduleDispatch.js",
                 "modules/messageHandler.js",
                 "modules/showMessage.js"
             ],
