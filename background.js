@@ -7,7 +7,7 @@ switch (ENV_MODE) {
         serverUrl = "http://localhost:3000";
         break;
     case "production":
-        serverUrl = "https://app.hcpdispatcher.com";
+        serverUrl = "https://webapp-pragmatic-portal.azurewebsites.net";
         break;
     default:
         serverUrl = "https://hcp-dispatcher-nextjs.azurewebsites.net";
@@ -37,6 +37,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 );
 // endregion
 
+
 // region Get cookies
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "readCookies") {
@@ -56,8 +57,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     const token = await bearerTokenPromise; // Wait for the bearer token
                     sendResponse({ cookie: cookieDetails, companyReference, referer, room, bearerToken: token });
                 });
+                console.log("Cookie true");
                 return true;
             } else {
+                console.log("Not on the correct page, or the tab URL is undefined.");
                 sendResponse({ data: "Not on the correct page, or the tab URL is undefined." });
             }
         });

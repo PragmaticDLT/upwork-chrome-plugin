@@ -8,6 +8,7 @@ let cookie = "";
 
 
 function startWhenDOMLoaded() {
+    console.log("==== startWhenDOMLoaded ==> ", );
     // region Create iframe
     const initialPopup = document.createElement("div");
     initialPopup.id = "upwork-init-popup";
@@ -18,9 +19,21 @@ function startWhenDOMLoaded() {
 
     initialPopup.appendChild(initialIframe);
     document.body.appendChild(initialPopup);
+
     console.log("==Plugin== iframe created");
 
-    initialIframe.onload = () => {
+    initialIframe.onload = async () => {
+        try {
+            console.log("Checking server...");
+            const result = await fetch(SERVER_URL, { method: "GET", mode: "no-cors" });
+            console.log("Server responded". result);
+        } catch (error) {
+            console.error("Check error");
+            showUserMessage(
+                "Dispatcher Assistant is currently unavailable as there is no connection to the server. Please try again later or contact the application developer for assistance.");
+            return;
+        }
+
         setTimeout(() => {
             initialIframe.contentWindow.postMessage({
                 type: "iframe created",
@@ -39,8 +52,8 @@ function startWhenDOMLoaded() {
             console.log("==Plugin== companyReference", companyReference);
             console.log("==Plugin== referer", referer);
             console.log("==Plugin== room", room);
-            console.log("==Plugin== bearerToken.length", bearerToken.length);
-            console.log("==Plugin== bearerToken.length", cookie.length);
+            console.log("==Plugin== bearerToken.length", bearerToken?.length);
+            console.log("==Plugin== bearerToken.length", cookie?.length);
         }
     );
     // endregion
@@ -65,6 +78,7 @@ function waitForTargetElementAndAdjustButton() {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
+console.log("==== start ==> ");
 // Check if the document has already loaded
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", startWhenDOMLoaded);
