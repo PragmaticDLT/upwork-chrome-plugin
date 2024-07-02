@@ -8,7 +8,7 @@ let cookie = "";
 
 
 function startWhenDOMLoaded() {
-    console.log("==== startWhenDOMLoaded ==> ", );
+    console.log("==== startWhenDOMLoaded ==> ");
     // region Create iframe
     const initialPopup = document.createElement("div");
     initialPopup.id = "upwork-init-popup";
@@ -25,8 +25,8 @@ function startWhenDOMLoaded() {
     initialIframe.onload = async () => {
         try {
             console.log("Checking server...");
-            const result = await fetch(SERVER_URL, { method: "GET", mode: "no-cors" });
-            console.log("Server responded". result);
+            await fetch(SERVER_URL, { method: "GET", mode: "no-cors" });
+            console.log("Server responded".result);
         } catch (error) {
             console.error("Check error");
             showUserMessage(
