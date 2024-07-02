@@ -6,9 +6,9 @@ function showUserMessage(message, type) {
         messageDiv = document.createElement("div");
         messageDiv.id = "message-div";
         messageDiv.style.position = "fixed";
-        messageDiv.style.top = "10%";
+        messageDiv.style.top = "8%";
         messageDiv.style.left = "65%";
-        messageDiv.style.transform = "translate(-50%, -50%)";
+        messageDiv.style.transform = "translate(-50%)";
         messageDiv.style.backgroundColor = "#fff";
         messageDiv.style.color = "#333";
         messageDiv.style.zIndex = "10000";
