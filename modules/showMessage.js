@@ -6,29 +6,38 @@ function showUserMessage(message, type) {
         messageDiv = document.createElement("div");
         messageDiv.id = "message-div";
         messageDiv.style.position = "fixed";
-        messageDiv.style.top = "15%";
-        messageDiv.style.left = "50%";
-        messageDiv.style.transform = "translateX(-50%)";
-        messageDiv.style.backgroundColor = "lavenderblush";
-        messageDiv.style.color = "white";
+        messageDiv.style.top = "10%";
+        messageDiv.style.left = "65%";
+        messageDiv.style.transform = "translate(-50%, -50%)";
+        messageDiv.style.backgroundColor = "#fff";
+        messageDiv.style.color = "#333";
         messageDiv.style.zIndex = "10000";
-        messageDiv.style.borderRadius = "5px";
-        messageDiv.style.maxWidth = "80%";
-        messageDiv.style.width = "500px"; // Фиксированная ширина
-        messageDiv.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
+        messageDiv.style.borderRadius = "8px";
+        messageDiv.style.maxWidth = "90%";
+        messageDiv.style.width = "400px";
+        messageDiv.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
         messageDiv.style.display = "flex";
         messageDiv.style.flexDirection = "column";
         messageDiv.style.boxSizing = "border-box";
+        messageDiv.style.padding = "5px";
+        messageDiv.style.fontFamily = "'Arial', sans-serif";
+
 
         const closeButton = document.createElement("button");
         closeButton.innerHTML = "&#10005;";
+        closeButton.style.position='fixed'
+        closeButton.style.top = "5px";
+        closeButton.style.right = "5px";
         closeButton.style.alignSelf = "flex-end";
         closeButton.style.border = "none";
         closeButton.style.backgroundColor = "transparent";
-        closeButton.style.color = "black";
+        closeButton.style.color = "#aaa";
         closeButton.style.fontSize = "20px";
         closeButton.style.cursor = "pointer";
         closeButton.style.padding = "5px 10px";
+        closeButton.style.transition = "color 0.3s";
+        closeButton.style.margin = "-10px -10px 10px 0";
+
 
         closeButton.onclick = function () {
             messageDiv.remove();
