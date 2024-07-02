@@ -1,4 +1,4 @@
-const ENV_MODE = "development";
+const ENV_MODE = "production";
 // 'development' || 'staging' || 'production'
 
 let serverUrl;
