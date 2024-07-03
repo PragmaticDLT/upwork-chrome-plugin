@@ -11,9 +11,3 @@ function envHandler(mode) {
             return "https://hcp-dispatcher-nextjs.azurewebsites.net";
     }
 }
-
-function removeBlocks() {
-    document.querySelectorAll(".custom-event-block").forEach(block => {
-        block.remove();
-    });
-}

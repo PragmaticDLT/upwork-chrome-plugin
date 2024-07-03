@@ -1,8 +1,5 @@
-let suggestedScheduleData = null;
-
-async function messageHandler(event, SERVER_URL) {
+async function messageHandler(event, SERVER_URL, bearerToken) {
     if (event.origin !== SERVER_URL) {
-        console.log("==Plugin== bad event.origin", event.origin);
         return;
     }
     const { action, templateUrl, headers, message = "" } = event.data;
@@ -47,9 +44,13 @@ async function messageHandler(event, SERVER_URL) {
         // region fetch
         case "fetch":
             let response = "error";
+            console.log("==MH== companyReference ==> ", companyReference);
             const url = templateUrl.replace("${companyReference}", companyReference).replace("${room}", room);
-            console.log("==Plugin== fetch url: ", url);
-            // showUserMessage(`Sync started for next room. \Please wait while the button become white`, "success");
+            console.log("==MH== fetch url: ", url);
+            console.log("==MH== bearerToken ==> ", bearerToken);
+            console.log("==MH== cookie ==> ", cookie);
+            console.log("==MH== referer ==> ", referer);
+
             const options = {
                 method : "GET",
                 headers: {
@@ -63,12 +64,14 @@ async function messageHandler(event, SERVER_URL) {
             };
 
             try {
+                console.log("==Plugin== url ==> ", url);
+                console.log("==== options ==> ", options);
                 const dataRes = await fetch(url, options);
                 const data = await dataRes.json();
                 console.log("==Plugin== fetched data: ", data);
                 if (!dataRes.ok) {
                     console.error("==Plugin== Failed to fetch", data);
-                    showUserMessage(`Failed to fetch data. URL ${url}`, "error");
+                    showUserMessage(`Failed to fetch URL ${url}`, "error");
                 }
                 else {
                     response = data;

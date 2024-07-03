@@ -1,4 +1,4 @@
-const ENV_MODE = "development";
+const ENV_MODE = "production";
 // 'development' || 'staging' || 'production'
 
 let serverUrl;
@@ -15,6 +15,7 @@ switch (ENV_MODE) {
 
 let bearerToken = '';
 let bearerTokenPromiseResolve;
+
 const bearerTokenPromise = new Promise(resolve => {
     bearerTokenPromiseResolve = resolve;
 });
@@ -22,6 +23,7 @@ const bearerTokenPromise = new Promise(resolve => {
 // region Get request header
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function (details) {
+
         for (var header of details.requestHeaders) {
             if (header.name.toLowerCase() === "authorization") {
                 console.log("Authorization header:", header.value);
@@ -32,8 +34,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         }
         return { requestHeaders: details.requestHeaders };
     },
-    { urls: ["https://www.upwork.com/api/v3/rooms/*"] },
-    ["requestHeaders", "extraHeaders"]
+    { urls: ["https://www.upwork.com/api/v3/rooms/rooms/simplified?limit=20&callerOrgId=*"] },
+    ["requestHeaders"]
 );
 // endregion
 
@@ -42,20 +44,23 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "readCookies") {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            const url = "https://www.upwork.com/";
+            const url = "https://www.upwork.com/ab/messages/rooms/";
 
             if (tabs[0] && tabs[0].url && tabs[0].url.startsWith(url)) {
                 const referer = tabs[0].url;
+                console.log("==BG== referer ==> ", referer);
                 const urlParams = new URLSearchParams(new URL(referer).search);
+                console.log("==BG== urlParams ==> ", urlParams);
                 const roomRegex = /room_[a-f0-9]{32}/;
                 const match = referer.match(roomRegex);
                 let room;
                 if (match) room = match[0];
                 const companyReference = urlParams.get("companyReference");
+                console.log("==BG== companyReference ==> ", companyReference);
                 chrome.cookies.getAll({ url: tabs[0].url }, async (cookies) => {
                     const cookieDetails = cookies.map(cookie => `${cookie.name}=${cookie.value}`).join("; ");
-                    const token = await bearerTokenPromise; // Wait for the bearer token
-                    sendResponse({ cookie: cookieDetails, companyReference, referer, room, bearerToken: token });
+                    await bearerTokenPromise;
+                    sendResponse({ cookie: cookieDetails, companyReference, referer, room, bearerToken });
                 });
                 console.log("Cookie true");
                 return true;
