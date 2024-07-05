@@ -6,9 +6,8 @@ function showUserMessage(message, type) {
         messageDiv = document.createElement("div");
         messageDiv.id = "message-div";
         messageDiv.style.position = "fixed";
-        messageDiv.style.top = "8%";
-        messageDiv.style.left = "65%";
-        messageDiv.style.transform = "translate(-50%)";
+        messageDiv.style.top = "1%";
+        messageDiv.style.right = "2%";
         messageDiv.style.backgroundColor = "#fff";
         messageDiv.style.color = "#333";
         messageDiv.style.zIndex = "10000";
@@ -20,14 +19,13 @@ function showUserMessage(message, type) {
         messageDiv.style.flexDirection = "column";
         messageDiv.style.boxSizing = "border-box";
         messageDiv.style.padding = "5px";
-        messageDiv.style.fontFamily = "'Arial', sans-serif";
-
+        messageDiv.style.fontFamily = "Arial, sans-serif";
 
         const closeButton = document.createElement("button");
         closeButton.innerHTML = "&#10005;";
-        closeButton.style.position='fixed'
+        closeButton.style.position = "absolute";
         closeButton.style.top = "5px";
-        closeButton.style.right = "5px";
+        closeButton.style.right = "10px";
         closeButton.style.alignSelf = "flex-end";
         closeButton.style.border = "none";
         closeButton.style.backgroundColor = "transparent";
@@ -36,8 +34,6 @@ function showUserMessage(message, type) {
         closeButton.style.cursor = "pointer";
         closeButton.style.padding = "5px 10px";
         closeButton.style.transition = "color 0.3s";
-        closeButton.style.margin = "-10px -10px 10px 0";
-
 
         closeButton.onclick = function () {
             messageDiv.remove();
@@ -48,7 +44,7 @@ function showUserMessage(message, type) {
         const messagesContainer = document.createElement("div");
         messagesContainer.style.overflowY = "auto";
         messagesContainer.style.overflowX = "hidden";
-        messagesContainer.style.maxHeight = "400px";
+        messagesContainer.style.maxHeight = "300px";
         messagesContainer.style.padding = "10px";
         messagesContainer.style.paddingTop = "0";
         messagesContainer.style.width = "100%";
@@ -66,7 +62,15 @@ function showUserMessage(message, type) {
     messageText.style.margin = "5px 0";
     messageText.style.wordWrap = "break-word";
     messagesContainer.appendChild(messageText);
-
-    // Прокручиваем к последнему сообщению
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    // region Close Modal in 5s
+    if (message.includes("Sync finished")) {
+        setTimeout(() => {
+            if (messageDiv) {
+                messageDiv.remove();
+            }
+        }, 5000);
+    }
+    // endregion
 }

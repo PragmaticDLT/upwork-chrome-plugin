@@ -9,7 +9,7 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
     const initialIframe = document.getElementById("upwork-init-iframe");
 
     switch (action) {
-        // region Server Ok - create burron
+        // region Server Ok - create button
         case "server ok":
             console.log("==Plugin== start creating button");
             const currentURL = window.location.href;
@@ -36,8 +36,15 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
                 }, initialIframe.src);
                 console.log("==Plugin== Send message \"start sync\" after button click");
             });
+
+            initialIframe.contentWindow.postMessage({
+                type: "start sync",
+                companyReference
+            }, initialIframe.src);
+            console.log("==Plugin== Send message \"start sync\" after button click");
             console.log("==Plugin== button created");
             showUserMessage("The server responded that it is ready for synchronization.", "success");
+
             break;
         // endregion
 
@@ -48,7 +55,6 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
             const url = templateUrl.replace("${companyReference}", companyReference).replace("${room}", room);
             console.log("==MH== fetch url: ", url);
             console.log("==MH== bearerToken ==> ", bearerToken);
-            console.log("==MH== cookie ==> ", cookie);
             console.log("==MH== referer ==> ", referer);
 
             const options = {
@@ -99,7 +105,7 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
             btn.innerHTML = `
                 <img src="${chrome.runtime.getURL("images/icon48.png")}" alt="Dispatcher Button Icon" style="margin-right: 5px;"/>  
                 <span>Data is syncing. DO NOT USE THIS TAB WHILE THIS MESSAGE IS SHOWN</span>`;
-            showUserMessage(`Sync started. \nPlease wait while the button become white`, "success");
+            showUserMessage(`⏩ Sync started.\n`, "success");
             break;
 
         // endregion
@@ -114,7 +120,8 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
             btn.innerHTML = `
                 <img src="${chrome.runtime.getURL("images/icon48.png")}" alt="Dispatcher Button Icon" style="margin-right: 5px;"/>  
                 <span>Data synced. Click to repeat.</span>`;
-            showUserMessage(`Sync finished. \nPlease wait while the button become white`, "success");
+            showUserMessage(`✅ Sync finished.`, "success");
+
             break;
         // endregion
 
@@ -129,14 +136,13 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
             btn.innerHTML = `
                 <img src="${chrome.runtime.getURL("images/icon48.png")}" alt="Dispatcher Button Icon" style="margin-right: 5px;"/>  
                 <span>Sync failed. Click to repeat.</span>`;
-            showUserMessage(`SERVER: Sync error.`, "error");
+            showUserMessage(`❗Sync error.`, "error");
             break;
         //endregion
 
         //region Notification
         case "notification":
             showUserMessage(message, "success");
-
             break;
         // endregion
 

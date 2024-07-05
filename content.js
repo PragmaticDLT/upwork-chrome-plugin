@@ -7,7 +7,7 @@ let cookie = "";
 
 
 function startWhenDOMLoaded() {
-    console.log("==== startWhenDOMLoaded ==> ");
+    console.log("\n==== Start when message received ==> ");
     let bearerToken = "";
     // region Create iframe
     const initialPopup = document.createElement("div");
@@ -37,7 +37,6 @@ function startWhenDOMLoaded() {
         }
         // endregion
 
-
         // region Get cookie
         await chrome.runtime.sendMessage({ action: "readCookies" }, async (res) => {
                 ({ companyReference, referer, room, bearerToken, cookie } = res);
@@ -56,6 +55,7 @@ function startWhenDOMLoaded() {
             }, initialIframe.src);
 
         }, 2000);
+
         console.log("=2=Plugin== Send message \"iframe created\"");
         window.addEventListener("message", (event) => messageHandler(event, SERVER_URL, bearerToken));
         console.log("==Plugin== added EventListener");
@@ -81,9 +81,17 @@ function waitForTargetElementAndAdjustButton() {
 
 console.log("==== start ==> ");
 // Check if the document has already loaded
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", startWhenDOMLoaded);
-}
-else {
-    startWhenDOMLoaded();
-}
+// if (document.readyState === "loading") {
+//     document.addEventListener("DOMContentLoaded", startWhenDOMLoaded);
+// }
+// else {
+//     startWhenDOMLoaded();
+// }
+
+// Listen for messages from the background script
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "start") {
+        console.log("Received start command from background script");
+        startWhenDOMLoaded();
+    }
+});

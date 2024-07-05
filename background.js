@@ -1,5 +1,7 @@
+// region Preparations
 const ENV_MODE = "production";
 // 'development' || 'staging' || 'production'
+
 
 let serverUrl;
 switch (ENV_MODE) {
@@ -12,8 +14,9 @@ switch (ENV_MODE) {
     default:
         serverUrl = "https://hcp-dispatcher-nextjs.azurewebsites.net";
 }
+// endregion
 
-let bearerToken = '';
+let bearerToken = "";
 let bearerTokenPromiseResolve;
 
 const bearerTokenPromise = new Promise(resolve => {
@@ -39,7 +42,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 );
 // endregion
 
-
 // region Get cookies
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "readCookies") {
@@ -54,7 +56,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 const roomRegex = /room_[a-f0-9]{32}/;
                 const match = referer.match(roomRegex);
                 let room;
-                if (match) room = match[0];
+                if (match) {
+                    room = match[0];
+                }
                 const companyReference = urlParams.get("companyReference");
                 console.log("==BG== companyReference ==> ", companyReference);
                 chrome.cookies.getAll({ url: tabs[0].url }, async (cookies) => {
@@ -64,7 +68,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 });
                 console.log("Cookie true");
                 return true;
-            } else {
+            }
+            else {
                 console.log("Not on the correct page, or the tab URL is undefined.");
                 sendResponse({ data: "Not on the correct page, or the tab URL is undefined." });
             }
@@ -73,3 +78,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 //endregion
+
+// region Start function
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    const targetUrl = "https://www.upwork.com/ab/messages/rooms/";
+    if (changeInfo.status === "complete" && tab.url.startsWith(targetUrl)) {
+        console.log("==== changeInfo ==> ", changeInfo);
+        chrome.tabs.sendMessage(tabId, { action: "start" });
+    }
+});
+// endregion
