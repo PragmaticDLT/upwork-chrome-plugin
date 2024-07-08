@@ -26,7 +26,6 @@ const bearerTokenPromise = new Promise(resolve => {
 // region Get request header
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function (details) {
-
         for (var header of details.requestHeaders) {
             if (header.name.toLowerCase() === "authorization") {
                 console.log("Authorization header:", header.value);
