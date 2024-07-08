@@ -1,4 +1,4 @@
-const ENV_MODE = "development"; // 'production' || 'staging' || 'production'
+const ENV_MODE = "production"; // 'production' || 'staging' || 'production'
 const SERVER_URL = envHandler(ENV_MODE);
 let companyReference = "";
 let referer = "";

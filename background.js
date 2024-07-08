@@ -11,8 +11,6 @@ switch (ENV_MODE) {
     case "production":
         serverUrl = "https://webapp-pragmatic-portal.azurewebsites.net";
         break;
-    default:
-        serverUrl = "https://hcp-dispatcher-nextjs.azurewebsites.net";
 }
 // endregion
 
