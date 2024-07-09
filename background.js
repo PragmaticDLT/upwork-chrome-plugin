@@ -1,5 +1,5 @@
 // region Preparations
-const ENV_MODE = "production";
+const ENV_MODE = "development";
 // 'development' || 'staging' || 'production'
 
 
@@ -77,11 +77,57 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 //endregion
 
 // region Start function
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    const targetUrl = "https://www.upwork.com/ab/messages/rooms/";
-    if (changeInfo.status === "complete" && tab.url.startsWith(targetUrl)) {
-        console.log("==== changeInfo ==> ", changeInfo);
-        chrome.tabs.sendMessage(tabId, { action: "start" });
-    }
-});
+// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+//     const targetUrl = "https://www.upwork.com/ab/messages/rooms/";
+//     if (changeInfo.status === "complete" && tab.url.startsWith(targetUrl)) {
+//         console.log("==== changeInfo ==> ", changeInfo);
+//         chrome.tabs.sendMessage(tabId, { action: "start" });
+//     }
+// });
 // endregion
+
+
+async function checkTabs(tabId, changeInfo, tab) {
+    if (changeInfo?.status === "complete") {
+        let activeTabs = 0;
+
+        // region Get Chrome tabs
+        const tabs = await new Promise((resolve) => {
+            chrome.tabs.query({}, (result) => resolve(result));
+        });
+        // endregion Get chrome tabs
+
+        // region Check if script is on tab
+        for (const tab of tabs) {
+            try {
+                const response = await new Promise((resolve) => {
+                    chrome.tabs.sendMessage(tab?.id, { action: "checkContentScript" }, (response) => {
+                        if (chrome.runtime.lastError) {
+                            resolve(null);
+                        }
+                        else {
+                            resolve(response);
+                        }
+                    });
+                });
+                if (response && response.status === "active") {
+                    activeTabs++;
+                }
+            } catch (error) {
+                console.error(`Error checking tab ${tab.id}:`, error);
+            }
+        }
+        // endregion Check if script is on tab
+
+        console.log("Are there another tabs with working plugin? ", activeTabs > 1, activeTabs);
+        if (!activeTabs) {
+            const targetUrl = "https://www.upwork.com/ab/messages/rooms/";
+            if (tab.url.startsWith(targetUrl)) {
+                chrome.tabs.sendMessage(tabId, { action: "start" });
+            }
+        }
+    }
+}
+
+chrome.tabs.onUpdated.addListener(checkTabs);
+chrome.tabs.onCreated.addListener(checkTabs);

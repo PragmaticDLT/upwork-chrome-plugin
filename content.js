@@ -1,9 +1,10 @@
-const ENV_MODE = "production"; // 'production' || 'staging' || 'production'
+const ENV_MODE = "development"; // 'development' || 'staging' || 'production'
 const SERVER_URL = envHandler(ENV_MODE);
 let companyReference = "";
 let referer = "";
 let room = "";
 let cookie = "";
+let isWorking = false;
 
 
 function startWhenDOMLoaded() {
@@ -80,18 +81,23 @@ function waitForTargetElementAndAdjustButton() {
 }
 
 console.log("==== start ==> ");
-// Check if the document has already loaded
-// if (document.readyState === "loading") {
-//     document.addEventListener("DOMContentLoaded", startWhenDOMLoaded);
-// }
-// else {
-//     startWhenDOMLoaded();
-// }
 
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "start") {
-        console.log("Received start command from background script");
-        startWhenDOMLoaded();
+
+    switch (request.action) {
+
+        case "start":
+            console.log("Received start command from background script");
+            startWhenDOMLoaded();
+            isWorking = true;
+            break;
+
+        case"checkContentScript":
+            console.log("Received check content script");
+            if (isWorking) {
+                sendResponse({ status: "active" });
+            }
+            break;
     }
 });
