@@ -19,23 +19,25 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
                 return;
             }
 
-            const button = document.createElement("button");
-            button.id = "floating-button";
-            button.style.cursor = "pointer";
-            button.innerHTML = `
+            if (!document.getElementById("floating-button")) {
+                const button = document.createElement("button");
+                button.id = "floating-button";
+                button.style.cursor = "pointer";
+                button.innerHTML = `
                 <img src="${chrome.runtime.getURL("images/icon48.png")}" alt="Dispatcher Button Icon" style="margin-right: 5px;"/>  
                 <span>Sync data</span>`;
 
-            document.body.appendChild(button);
-            waitForTargetElementAndAdjustButton();
+                document.body.appendChild(button);
+                waitForTargetElementAndAdjustButton();
 
-            button.addEventListener("click", function (event) {
-                initialIframe.contentWindow.postMessage({
-                    type: "start sync",
-                    companyReference
-                }, initialIframe.src);
-                console.log("==Plugin== Send message \"start sync\" after button click");
-            });
+                button.addEventListener("click", function (event) {
+                    initialIframe.contentWindow.postMessage({
+                        type: "start sync",
+                        companyReference
+                    }, initialIframe.src);
+                    console.log("==Plugin== Send message \"start sync\" after button click");
+                });
+            }
 
             initialIframe.contentWindow.postMessage({
                 type: "start sync",

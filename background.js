@@ -1,5 +1,5 @@
 // region Preparations
-const ENV_MODE = "development";
+const ENV_MODE = "production";
 // 'development' || 'staging' || 'production'
 
 
@@ -74,17 +74,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
 });
-//endregion
 
-// region Start function
-// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-//     const targetUrl = "https://www.upwork.com/ab/messages/rooms/";
-//     if (changeInfo.status === "complete" && tab.url.startsWith(targetUrl)) {
-//         console.log("==== changeInfo ==> ", changeInfo);
-//         chrome.tabs.sendMessage(tabId, { action: "start" });
-//     }
-// });
-// endregion
 
 
 async function checkTabs(tabId, changeInfo, tab) {
