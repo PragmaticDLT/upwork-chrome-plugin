@@ -37,16 +37,16 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
                     }, initialIframe.src);
                     console.log("==Plugin== Send message \"start sync\" after button click");
                 });
+
+
+                initialIframe.contentWindow.postMessage({
+                    type: "start sync",
+                    companyReference
+                }, initialIframe.src);
+                console.log("==Plugin== Send message \"start sync\" after button click");
+                console.log("==Plugin== button created");
+                showUserMessage("The server responded that it is ready for synchronization.", "success");
             }
-
-            initialIframe.contentWindow.postMessage({
-                type: "start sync",
-                companyReference
-            }, initialIframe.src);
-            console.log("==Plugin== Send message \"start sync\" after button click");
-            console.log("==Plugin== button created");
-            showUserMessage("The server responded that it is ready for synchronization.", "success");
-
             break;
         // endregion
 

@@ -21,6 +21,7 @@ const bearerTokenPromise = new Promise(resolve => {
     bearerTokenPromiseResolve = resolve;
 });
 
+
 // region Get request header
 chrome.webRequest.onBeforeSendHeaders.addListener(
     function (details) {
@@ -74,7 +75,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
 });
-
+// endregion Get cookies
 
 
 async function checkTabs(tabId, changeInfo, tab) {

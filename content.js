@@ -10,6 +10,7 @@ let isWorking = false;
 function startWhenDOMLoaded() {
     console.log("\n==== Start when message received ==> ");
     let bearerToken = "";
+
     // region Create iframe
     const initialPopup = document.createElement("div");
     initialPopup.id = "upwork-init-popup";
