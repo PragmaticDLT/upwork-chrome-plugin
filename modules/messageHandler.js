@@ -9,7 +9,7 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
     const initialIframe = document.getElementById("upwork-init-iframe");
 
     switch (action) {
-        // region Server Ok - create button
+        // region Server Ok - create button and stat sync
         case "server ok":
             console.log("==Plugin== start creating button");
             const currentURL = window.location.href;
@@ -50,7 +50,7 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
             break;
         // endregion
 
-        // region fetch
+        // region Fetch
         case "fetch":
             let response = "error";
             console.log("==MH== companyReference ==> ", companyReference);
@@ -97,7 +97,7 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
             break;
         // endregion
 
-        // region start sync
+        // region Started sync
         case "sync started":
             btn.disabled = true;
             btn.style.cursor = "default";
@@ -112,7 +112,7 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
 
         // endregion
 
-        // region sync finished
+        // region Sync finished
         case "sync finished":
             btn.disabled = false;
             btn.style.cursor = "pointer";
@@ -125,7 +125,7 @@ async function messageHandler(event, SERVER_URL, bearerToken) {
             showUserMessage(`✅ Sync finished.`, "success");
 
             break;
-        // endregion
+        // endregion Sync finished
 
         //     region Error
         case "error":
